@@ -5,6 +5,7 @@ class FullscreenWindow:
     def __init__(self, root, x, y, width, height, show_clock=False):
         self.root = root
         self.show_clock = show_clock
+        self.clock_update_id = None  # Track the after callback ID
 
         # Set window size and position
         self.root.geometry(f'+{x}+{y}')
@@ -24,9 +25,11 @@ class FullscreenWindow:
     def update_clock(self):
         now = datetime.now().strftime('%H:%M:%S')
         self.clock_label.config(text=now)
-        self.root.after(1000, self.update_clock)
+        self.clock_update_id = self.root.after(1000, self.update_clock)  # Schedule next update
 
     def close_window(self, event):
+        if self.clock_update_id is not None:
+            self.root.after_cancel(self.clock_update_id)  # Cancel the scheduled callback
         self.root.destroy()
 
 def create_window(x, y, width, height, show_clock=False):
