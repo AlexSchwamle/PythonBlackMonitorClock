@@ -41,12 +41,22 @@ def create_window(offsets, show_clock=False):
     root.overrideredirect(True)
     return root
 
+def close_all_windows(event=None):
+    left_screen.quit() 
+    top_screen.quit() 
+    right_screen.quit() 
+
 if __name__ == "__main__":
     # Create windows for all three monitors
     left_screen = create_window(left_screen_middle)
     top_screen = create_window(top_screen_middle)
     right_screen = create_window(right_screen_middle, show_clock=True)
     
+    # Bind the Ctrl + W key combination to close_all_windows function
+    left_screen.bind_all('<Control-w>', close_all_windows)
+    top_screen.bind_all('<Control-w>', close_all_windows)
+    right_screen.bind_all('<Control-w>', close_all_windows)
+
     # Run all windows
     def run_all():
         top_screen.mainloop()
