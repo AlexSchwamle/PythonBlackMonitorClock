@@ -2,17 +2,12 @@ import tkinter as tk
 from datetime import datetime
 
 class FullscreenWindow:
-    def __init__(self, root, screen_id, show_clock=False):
+    def __init__(self, root, x, y, width, height, show_clock=False):
         self.root = root
-        self.screen_id = screen_id
         self.show_clock = show_clock
 
-        # Get screen width and height
-        self.screen_width = self.root.winfo_screenwidth()
-        self.screen_height = self.root.winfo_screenheight()
-
-        # Create a fullscreen window
-        self.root.attributes('-fullscreen', True)
+        # Set window size and position
+        self.root.geometry(f'+{x}+{y}')
         self.root.configure(background='black')
         
         if self.show_clock:
@@ -20,9 +15,11 @@ class FullscreenWindow:
             self.clock_label.pack(anchor='center')
             self.update_clock()
 
+        self.root.state("zoomed")
+
         # Bind double-click event to close the window
         self.root.bind('<Double-1>', self.close_window)
-        
+
     def update_clock(self):
         now = datetime.now().strftime('%H:%M:%S')
         self.clock_label.config(text=now)
@@ -31,25 +28,27 @@ class FullscreenWindow:
     def close_window(self, event):
         self.root.destroy()
 
-def create_window(screen_id, show_clock=False):
+def create_window(x, y, width, height, show_clock=False):
     root = tk.Tk()
-    app = FullscreenWindow(root, screen_id, show_clock)
-    root.mainloop()
+    app = FullscreenWindow(root, x, y, width, height, show_clock)
+    root.update_idletasks()
+    root.overrideredirect(True)
+    return root
 
 if __name__ == "__main__":
-    # Create black screen on left monitor
-    left_screen = tk.Tk()
-    left_app = FullscreenWindow(left_screen, 1)
-    
-    # Create black screen on top monitor
-    top_screen = tk.Tk()
-    top_app = FullscreenWindow(top_screen, 2)
-    
-    # Create clock display on right monitor
-    right_screen = tk.Tk()
-    right_app = FullscreenWindow(right_screen, 3, show_clock=True)
+    # Adjust these values to your screen resolution
+    screen_width = 1920  
+    screen_height = 1080
+
+    # Create windows for all three monitors
+    left_screen = create_window(-1063, 505, screen_width, screen_height)
+    top_screen = create_window(90, -559, screen_width, screen_height)
+    right_screen = create_window(927, 523, screen_width, screen_height, show_clock=True)
     
     # Run all windows
+    def run_all():
+        top_screen.mainloop()
+        right_screen.mainloop()
+    
+    left_screen.after(0, run_all)
     left_screen.mainloop()
-    top_screen.mainloop()
-    right_screen.mainloop()
