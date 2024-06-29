@@ -1,8 +1,10 @@
+from Config import *
+
 import tkinter as tk
 from datetime import datetime
 
 class FullscreenWindow:
-    def __init__(self, root, x, y, width, height, show_clock=False):
+    def __init__(self, root, x, y, show_clock=False):
         self.root = root
         self.show_clock = show_clock
         self.clock_update_id = None  # Track the after callback ID
@@ -29,25 +31,21 @@ class FullscreenWindow:
 
     def close_window(self, event):
         if self.clock_update_id is not None:
-            self.root.after_cancel(self.clock_update_id)  # Cancel the scheduled callback
+            self.root.after_cancel(self.clock_update_id) # Cancel the scheduled callback
         self.root.destroy()
 
-def create_window(x, y, width, height, show_clock=False):
+def create_window(offsets, show_clock=False):
     root = tk.Tk()
-    app = FullscreenWindow(root, x, y, width, height, show_clock)
+    app = FullscreenWindow(root, offsets[0], offsets[1], show_clock)
     root.update_idletasks()
     root.overrideredirect(True)
     return root
 
 if __name__ == "__main__":
-    # Adjust these values to your screen resolution
-    screen_width = 1920  
-    screen_height = 1080
-
     # Create windows for all three monitors
-    left_screen = create_window(-1063, 505, screen_width, screen_height)
-    top_screen = create_window(90, -559, screen_width, screen_height)
-    right_screen = create_window(927, 523, screen_width, screen_height, show_clock=True)
+    left_screen = create_window(left_screen_middle)
+    top_screen = create_window(top_screen_middle)
+    right_screen = create_window(right_screen_middle, show_clock=True)
     
     # Run all windows
     def run_all():
