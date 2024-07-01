@@ -15,7 +15,7 @@ class FullscreenWindow:
         
         if self.show_clock:
             # Create and place the clock label
-            self.clock_label = tk.Label(self.root, font=('Helvetica', 48), fg='gray', bg='black')
+            self.clock_label = tk.Label(self.root, font=('Helvetica', 48), fg='gray10', bg='black')
             self.clock_label.place(relx=0.5, rely=0.5, anchor='center')
             self.update_clock()
 
