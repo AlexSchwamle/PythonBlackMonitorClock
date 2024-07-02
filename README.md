@@ -3,7 +3,7 @@ Uses Python with TKinter to open a pure black background on a triple monitor set
 
 Hotkeys:
 - If you double click any of the windows, it will close that singular window.
-- If you press `Ctrl` + `W` on any of the three windows, it will close all three windows immediately.
+- If you press `Ctrl` + `W` on any of the three windows **3 times**, it will close all three windows immediately.
 
 ## Installation
 1. [Install Python](https://docs.anaconda.com/miniconda/)

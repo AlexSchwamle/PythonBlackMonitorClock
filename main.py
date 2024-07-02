@@ -42,9 +42,9 @@ def create_window(offsets, show_clock=False):
     return root
 
 def close_all_windows(event=None):
-    left_screen.destroy() 
-    top_screen.destroy() 
-    right_screen.destroy() 
+    left_screen.quit() 
+    top_screen.quit() 
+    right_screen.quit() 
 
 if __name__ == "__main__":
     # Create windows for all three monitors
