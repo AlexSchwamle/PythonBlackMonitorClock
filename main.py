@@ -25,6 +25,7 @@ class FullscreenWindow:
         # Bind double-click event to close the window
         self.root.bind('<Double-1>', self.close_window)
         self.root.bind("<Control-n>", lambda e: system(cmdToOpenBrowser))
+        self.root.bind("<Double-3>", lambda e: system(cmdToOpenBrowser))
 
     def update_clock(self):
         now = datetime.now().strftime('%H:%M:%S')
