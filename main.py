@@ -38,8 +38,9 @@ class FullscreenWindow:
         self.root.destroy()
 
 def create_window(offsets, show_clock=False):
+    showClock = True if len(offsets) > 2 else False
     root = tk.Tk()
-    app = FullscreenWindow(root, offsets[0], offsets[1], show_clock)
+    app = FullscreenWindow(root, offsets[0], offsets[1], showClock)
     root.update_idletasks()
     root.overrideredirect(True)
     return root
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     # Create windows for all three monitors
     left_screen = create_window(left_screen_middle)
     top_screen = create_window(top_screen_middle)
-    right_screen = create_window(right_screen_middle, show_clock=True)
+    right_screen = create_window(right_screen_middle)
     
     # Bind the Ctrl + W key combination to close_all_windows function
     left_screen.bind_all('<Control-w>', close_all_windows)
