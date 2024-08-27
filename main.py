@@ -5,39 +5,39 @@ from datetime import datetime
 from os import system
 
 class FullscreenWindow:
-    def __init__(self, root, x, y, show_clock=False):
+    def __init__(self, root, x, y, showClock=False):
         self.root = root
-        self.show_clock = show_clock
-        self.clock_update_id = None  # Track the after callback ID
+        self.showClock = showClock
+        self.clockUpdateID = None  # Track the after callback ID
 
         # Set window size and position
         self.root.geometry(f'+{x}+{y}')
         self.root.configure(background='black')
         
-        if self.show_clock:
+        if self.showClock:
             # Create and place the clock label
-            self.clock_label = tk.Label(self.root, font=('Helvetica', 48), fg='gray10', bg='black')
-            self.clock_label.place(relx=0.5, rely=0.5, anchor='center')
-            self.update_clock()
+            self.clockLabel = tk.Label(self.root, font=('Helvetica', 48), fg='gray10', bg='black')
+            self.clockLabel.place(relx=0.5, rely=0.5, anchor='center')
+            self.updateClock()
 
         self.root.state("zoomed")
 
         # Bind double-click event to close the window
-        self.root.bind('<Double-1>', self.close_window)
-        self.root.bind("<Control-n>", lambda e: system(cmdToOpenBrowser))
-        self.root.bind("<Double-3>", lambda e: system(cmdToOpenBrowser))
+        self.root.bind('<Double-1>', self.closeWindow)
+        self.root.bind("<Control-n>", lambda e: system(CMD_TO_OPEN_BROWSER))
+        self.root.bind("<Double-3>", lambda e: system(CMD_TO_OPEN_BROWSER))
 
-    def update_clock(self):
+    def updateClock(self):
         now = datetime.now().strftime('%H:%M:%S')
-        self.clock_label.config(text=now)
-        self.clock_update_id = self.root.after(1000, self.update_clock)  # Schedule next update
+        self.clockLabel.config(text=now)
+        self.clockUpdateID = self.root.after(1000, self.updateClock)  # Schedule next update
 
-    def close_window(self, event):
-        if self.clock_update_id is not None:
-            self.root.after_cancel(self.clock_update_id) # Cancel the scheduled callback
+    def closeWindow(self, event):
+        if self.clockUpdateID is not None:
+            self.root.after_cancel(self.clockUpdateID) # Cancel the scheduled callback
         self.root.destroy()
 
-def create_window(offsets, show_clock=False):
+def createWindow(offsets, showClock=False):
     showClock = True if len(offsets) > 2 else False
     root = tk.Tk()
     app = FullscreenWindow(root, offsets[0], offsets[1], showClock)
@@ -45,26 +45,26 @@ def create_window(offsets, show_clock=False):
     root.overrideredirect(True)
     return root
 
-def close_all_windows(event=None):
-    left_screen.quit() 
-    top_screen.quit() 
-    right_screen.quit() 
+def closeAllWindows(event=None):
+    monitor1.quit() 
+    monitor2.quit() 
+    monitor3.quit() 
 
 if __name__ == "__main__":
     # Create windows for all three monitors
-    left_screen = create_window(left_screen_middle)
-    top_screen = create_window(top_screen_middle)
-    right_screen = create_window(right_screen_middle)
+    monitor1 = createWindow(MONITOR_1_POS)
+    monitor2 = createWindow(MONITOR_2_POS)
+    monitor3 = createWindow(MONITOR_3_POS)
     
-    # Bind the Ctrl + W key combination to close_all_windows function
-    left_screen.bind_all('<Control-w>', close_all_windows)
-    top_screen.bind_all('<Control-w>', close_all_windows)
-    right_screen.bind_all('<Control-w>', close_all_windows)
+    # Bind the Ctrl + W key combination to closeAllWindows function
+    monitor1.bind_all('<Control-w>', closeAllWindows)
+    monitor2.bind_all('<Control-w>', closeAllWindows)
+    monitor3.bind_all('<Control-w>', closeAllWindows)
 
     # Run all windows
     def run_all():
-        top_screen.mainloop()
-        right_screen.mainloop()
+        monitor2.mainloop()
+        monitor3.mainloop()
     
-    left_screen.after(0, run_all)
-    left_screen.mainloop()
+    monitor1.after(0, run_all)
+    monitor1.mainloop()
