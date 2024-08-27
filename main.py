@@ -1,6 +1,7 @@
 from Config import *
 
 import tkinter as tk
+from pyautogui import press as pyautoguiPress
 from datetime import datetime
 from os import system
 
@@ -22,10 +23,11 @@ class FullscreenWindow:
 
         self.root.state("zoomed")
 
-        # Bind double-click event to close the window
+        # Per-window key binding funcs
         self.root.bind('<Double-1>', self.closeWindow)
         self.root.bind("<Control-n>", lambda e: system(CMD_TO_OPEN_BROWSER))
         self.root.bind("<Double-3>", lambda e: system(CMD_TO_OPEN_BROWSER))
+        self.root.bind("<Double-2>", lambda e: pyautoguiPress("win"))
 
     def updateClock(self):
         now = datetime.now().strftime('%H:%M:%S')
