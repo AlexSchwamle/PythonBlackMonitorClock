@@ -32,7 +32,8 @@ class FullscreenWindow:
         self.root.bind("<Double-2>", lambda e: pyautoguiPress("win"))
 
     def updateClock(self):
-        now = datetime.now().strftime('%H:%M:%S')
+        format = "%H:%M:%S" if CLOCK_24H else "%I:%M:%S %p"
+        now = datetime.now().strftime(format)
         self.clockLabel.config(text=now)
         self.clockUpdateID = self.root.after(1000, self.updateClock)  # Schedule next update
 
