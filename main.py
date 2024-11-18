@@ -6,6 +6,7 @@ from datetime import datetime
 from os import system, name
 
 RUNNING_WINDOWS = name == "nt"
+ZERO_PAD_REMOVAL = "#" if RUNNING_WINDOWS else "-"
 
 class FullscreenWindow:
     def __init__(self, root, x, y, showClock=False):
@@ -32,7 +33,7 @@ class FullscreenWindow:
         self.root.bind("<Double-2>", lambda e: pyautoguiPress("win"))
 
     def updateClock(self):
-        format = "%H:%M:%S" if CLOCK_24H else "%I:%M:%S %p"
+        format = f"%{ZERO_PAD_REMOVAL}H:%M:%S" if CLOCK_24H else f"%{ZERO_PAD_REMOVAL}I:%M:%S %p"
         now = datetime.now().strftime(format)
         self.clockLabel.config(text=now)
         self.clockUpdateID = self.root.after(1000, self.updateClock)  # Schedule next update
