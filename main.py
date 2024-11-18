@@ -14,19 +14,19 @@ class FullscreenWindow:
         self.clockUpdateID = None  # Track the after callback ID
 
         # Set window size and position
-        self.root.geometry(f'+{x}+{y}')
-        self.root.configure(background='black')
+        self.root.geometry(f"+{x}+{y}")
+        self.root.configure(background="black")
         
         if self.showClock:
             # Create and place the clock label
-            self.clockLabel = tk.Label(self.root, font=('Helvetica', 48), fg='gray10', bg='black')
-            self.clockLabel.place(relx=0.5, rely=0.5, anchor='center')
+            self.clockLabel = tk.Label(self.root, font=("Helvetica", 48), fg="gray10", bg="black")
+            self.clockLabel.place(relx=0.5, rely=0.5, anchor="center")
             self.updateClock()
 
         self.root.state("zoomed")
 
         # Per-window key binding funcs
-        self.root.bind('<Double-1>', self.closeWindow)
+        self.root.bind("<Double-1>", self.closeWindow)
         self.root.bind("<Control-n>", lambda e: system(CMD_TO_OPEN_BROWSER))
         self.root.bind("<Double-3>", lambda e: system(CMD_TO_OPEN_BROWSER))
         self.root.bind("<Double-2>", lambda e: pyautoguiPress("win"))
@@ -66,9 +66,9 @@ if __name__ == "__main__":
     monitor3 = createWindow(MONITOR_3_POS)
     
     # Bind the Ctrl + W key combination to closeAllWindows function
-    monitor1.bind_all('<Control-w>', closeAllWindows)
-    monitor2.bind_all('<Control-w>', closeAllWindows)
-    monitor3.bind_all('<Control-w>', closeAllWindows)
+    monitor1.bind_all("<Control-w>", closeAllWindows)
+    monitor2.bind_all("<Control-w>", closeAllWindows)
+    monitor3.bind_all("<Control-w>", closeAllWindows)
 
     # Run all windows
     def run_all():
