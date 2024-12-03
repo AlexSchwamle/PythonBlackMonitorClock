@@ -2,11 +2,17 @@ from Config import *
 
 import tkinter as tk
 from pyautogui import press as pyautoguiPress
+from pyautogui import position as pyautoguiPosition
 from datetime import datetime
 from os import system, name
+from time import sleep
 
 RUNNING_WINDOWS = name == "nt"
 ZERO_PAD_REMOVAL = "#" if RUNNING_WINDOWS else "-"
+
+if RUNNING_WINDOWS:
+    from pygetwindow import getWindowsWithTitle
+    from pygetwindow import Win32Window
 
 class FullscreenWindow:
     def __init__(self, root, x, y, showClock=False):
@@ -29,7 +35,7 @@ class FullscreenWindow:
         # Per-window key binding funcs
         self.root.bind("<Double-1>", self.closeWindow)
         self.root.bind("<Control-n>", lambda e: system(CMD_TO_OPEN_BROWSER))
-        self.root.bind("<Double-3>", lambda e: system(CMD_TO_OPEN_BROWSER))
+        self.root.bind("<Double-3>", self.openBrowser)
         self.root.bind("<Double-2>", lambda e: pyautoguiPress("win"))
 
     def updateClock(self):
@@ -43,6 +49,17 @@ class FullscreenWindow:
             self.root.after_cancel(self.clockUpdateID) # Cancel the scheduled callback
         self.root.destroy()
 
+    def openBrowser(self, event):
+        system(CMD_TO_OPEN_BROWSER)
+        if RUNNING_WINDOWS:
+            while len(getWindowsWithTitle(NEW_TAB_TITLE)) == 0: # type: ignore
+                sleep(0.1)
+            newTabWindow: Win32Window = getWindowsWithTitle(NEW_TAB_TITLE)[0] # type: ignore (pylance not smart enough to see RUNNING_WINDOWS check)
+            newTabWindow.restore()
+            curMousePos = pyautoguiPosition()
+            newTabWindow.moveTo(curMousePos[0], curMousePos[1])
+            newTabWindow.maximize()
+        
 def createWindow(offsets, showClock=False):
     showClock = True if len(offsets) > 2 else False
     root = tk.Tk()

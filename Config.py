@@ -6,5 +6,8 @@ MONITOR_3_POS = 2742, 506, True
 # Make sure your browser's exe is in your path or you can specify the full path
 CMD_TO_OPEN_BROWSER = "start brave.exe" 
 
+# This is the new tab title for the browser you open, it's used to find the window and maximize it on the same monitor you double right click
+NEW_TAB_TITLE = "New Tab"
+
 # Set the clock to 24h or 12h format - set to False or True
 CLOCK_24H = False 
