@@ -3,6 +3,7 @@ from Config import *
 import tkinter as tk
 from pyautogui import press as pyautoguiPress
 from pyautogui import position as pyautoguiPosition
+from screeninfo import get_monitors 
 from datetime import datetime
 from os import system, name
 from time import sleep
@@ -49,6 +50,13 @@ class FullscreenWindow:
             self.root.after_cancel(self.clockUpdateID) # Cancel the scheduled callback
         self.root.destroy()
 
+    def getMonitorTopLeftAtMouse(self):
+        curX, curY = pyautoguiPosition()
+        for monitor in get_monitors():
+            if monitor.x <= curX <= monitor.x + monitor.width and monitor.y <= curY <= monitor.y + monitor.height:
+                return monitor.x, monitor.y
+        return curX, curY # Failsafe to current mouse position
+
     def openBrowser(self, event):
         system(CMD_TO_OPEN_BROWSER)
         if RUNNING_WINDOWS:
@@ -56,8 +64,8 @@ class FullscreenWindow:
                 sleep(0.1)
             newTabWindow: Win32Window = getWindowsWithTitle(NEW_TAB_TITLE)[0] # type: ignore (pylance not smart enough to see RUNNING_WINDOWS check)
             newTabWindow.restore()
-            curMousePos = pyautoguiPosition()
-            newTabWindow.moveTo(curMousePos[0], curMousePos[1])
+            topLeftX, topLeftY = self.getMonitorTopLeftAtMouse()
+            newTabWindow.moveTo(topLeftX, topLeftY)
             newTabWindow.maximize()
         
 def createWindow(offsets, showClock=False):
