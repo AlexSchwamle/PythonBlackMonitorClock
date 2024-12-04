@@ -16,7 +16,7 @@ if RUNNING_WINDOWS:
     from pygetwindow import Win32Window
 
 class FullscreenWindow:
-    def __init__(self, root, x, y, showClock=False):
+    def __init__(self, root: tk.Tk, x, y, showClock=False):
         self.root = root
         self.showClock = showClock
         self.clockUpdateID = None  # Track the after callback ID
@@ -60,7 +60,11 @@ class FullscreenWindow:
     def openBrowser(self, event):
         system(CMD_TO_OPEN_BROWSER)
         if RUNNING_WINDOWS:
+            infLoopBreaker = 0
             while len(getWindowsWithTitle(NEW_TAB_TITLE)) == 0: # type: ignore
+                infLoopBreaker += 1
+                if infLoopBreaker > 5 / 0.1: # 5 seconds 
+                    return 
                 sleep(0.1)
             newTabWindow: Win32Window = getWindowsWithTitle(NEW_TAB_TITLE)[0] # type: ignore (pylance not smart enough to see RUNNING_WINDOWS check)
             newTabWindow.restore()
