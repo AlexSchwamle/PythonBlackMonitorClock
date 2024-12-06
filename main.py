@@ -11,10 +11,6 @@ from time import sleep
 RUNNING_WINDOWS = name == "nt"
 ZERO_PAD_REMOVAL = "#" if RUNNING_WINDOWS else "-"
 
-if RUNNING_WINDOWS:
-    from pygetwindow import getWindowsWithTitle
-    from pygetwindow import Win32Window
-
 class FullscreenWindow:
     def __init__(self, root: tk.Tk, x, y, showClock=False):
         self.root = root
@@ -60,13 +56,15 @@ class FullscreenWindow:
     def openBrowser(self, event):
         system(CMD_TO_OPEN_BROWSER)
         if RUNNING_WINDOWS:
+            from pygetwindow import getWindowsWithTitle
+            from pygetwindow import Win32Window
             infLoopBreaker = 0
-            while len(getWindowsWithTitle(NEW_TAB_TITLE)) == 0: # type: ignore
+            while len(getWindowsWithTitle(NEW_TAB_TITLE)) == 0: 
                 infLoopBreaker += 1
                 if infLoopBreaker > 5 / 0.1: # 5 seconds 
                     return 
                 sleep(0.1)
-            newTabWindow: Win32Window = getWindowsWithTitle(NEW_TAB_TITLE)[0] # type: ignore (pylance not smart enough to see RUNNING_WINDOWS check)
+            newTabWindow: Win32Window = getWindowsWithTitle(NEW_TAB_TITLE)[0] 
             newTabWindow.restore()
             topLeftX, topLeftY = self.getMonitorTopLeftAtMouse()
             newTabWindow.moveTo(topLeftX, topLeftY)
