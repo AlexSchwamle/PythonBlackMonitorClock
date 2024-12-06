@@ -87,8 +87,8 @@ def closeAllWindows(event=None):
 
 if __name__ == "__main__":
     if RUNNING_WINDOWS: # Minimizes the python cmd since it pops up above the clock when minimzing another window
-        from pyautogui import getActiveWindow # type: ignore (pyautogui stubs don't have windows functions)
-        cmdWindow = getActiveWindow()
+        from pygetwindow import getWindowsWithTitle, Win32Window
+        cmdWindow: Win32Window = getWindowsWithTitle("python.exe")[0]
         cmdWindow.minimize()
 
     # Create windows for all three monitors
