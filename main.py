@@ -37,7 +37,7 @@ class FullscreenWindow:
         self.root.bind("<Double-1>", self.closeWindow)
         self.root.bind("<Control-n>", lambda e: system(CMD_TO_OPEN_BROWSER))
         self.root.bind("<Double-3>", self.openBrowser)
-        self.root.bind("<Double-2>", lambda e: pyautoguiPress("win"))
+        self.root.bind("<ButtonRelease-2>", lambda e: pyautoguiPress("win"))
 
     def updateClock(self):
         format = f"%{ZERO_PAD_REMOVAL}H:%M:%S" if CLOCK_24H else f"%{ZERO_PAD_REMOVAL}I:%M:%S %p"
