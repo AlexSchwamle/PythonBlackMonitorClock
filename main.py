@@ -3,6 +3,7 @@ from Config import *
 import tkinter as tk
 from pyautogui import press as pyautoguiPress
 from pyautogui import position as pyautoguiPosition
+from pyautogui import hotkey as pyautoguiHotkey
 from screeninfo import get_monitors 
 from datetime import datetime
 from os import system, name
@@ -27,6 +28,8 @@ class FullscreenWindow:
             self.clockLabel.place(relx=0.5, rely=0.5, anchor="center")
             self.updateClock()
 
+        self.allThreeMouseButtonsDown = {1: False, 2: False, 3: False}
+
         self.root.state("zoomed")
 
         # Per-window key binding funcs
@@ -34,6 +37,12 @@ class FullscreenWindow:
         self.root.bind("<Control-n>", lambda e: system(CMD_TO_OPEN_BROWSER))
         self.root.bind("<Double-3>", self.openBrowser)
         self.root.bind("<ButtonRelease-2>", lambda e: pyautoguiPress("win"))
+        self.root.bind("<Button-1>", self.setMouseStateDown)
+        self.root.bind("<Button-2>", self.setMouseStateDown)
+        self.root.bind("<Button-3>", self.setMouseStateDown)
+        self.root.bind("<ButtonRelease-1>", self.setMouseStateUp)
+        self.root.bind("<ButtonRelease-2>", self.setMouseStateUp)
+        self.root.bind("<ButtonRelease-3>", self.setMouseStateUp)
 
     def updateClock(self):
         format = f"%{ZERO_PAD_REMOVAL}H:%M:%S" if CLOCK_24H else f"%{ZERO_PAD_REMOVAL}I:%M:%S %p"
@@ -72,6 +81,17 @@ class FullscreenWindow:
             topLeftX, topLeftY = self.getMonitorTopLeftAtCoords(eventX, eventY)
             newTabWindow.moveTo(topLeftX, topLeftY)
             newTabWindow.maximize()
+
+    def _changeMouseDownState(self, button, state):
+        self.allThreeMouseButtonsDown.update({button: state})
+        if all(self.allThreeMouseButtonsDown.values()):
+            pyautoguiHotkey("win", "alt", "s")
+    def setMouseStateDown(self, event):
+        button = event.num 
+        self._changeMouseDownState(button, True)
+    def setMouseStateUp(self, event):
+        button = event.num 
+        self._changeMouseDownState(button, False)
         
 def createWindow(offsets, showClock=False):
     showClock = True if len(offsets) > 2 else False
