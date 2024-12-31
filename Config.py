@@ -11,3 +11,6 @@ NEW_TAB_TITLE = "New Tab"
 
 # Set the clock to 24h or 12h format - set to False or True
 CLOCK_24H = False 
+
+# This is a hotkey that happens when you press all 3 buttons on the mouse (left, right, middle). By default it turns off all monitors via my Autohotkey script.
+KEYS_TO_PRESS_WHEN_ALL_MOUSE_BUTTONS_DOWN = ["win", "alt", "s"]

@@ -85,7 +85,7 @@ class FullscreenWindow:
     def _changeMouseDownState(self, button, state):
         self.allThreeMouseButtonsDown.update({button: state})
         if all(self.allThreeMouseButtonsDown.values()):
-            pyautoguiHotkey("win", "alt", "s")
+            pyautoguiHotkey(*KEYS_TO_PRESS_WHEN_ALL_MOUSE_BUTTONS_DOWN)
     def setMouseStateDown(self, event):
         button = event.num 
         self._changeMouseDownState(button, True)
