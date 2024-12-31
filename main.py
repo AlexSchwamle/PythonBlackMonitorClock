@@ -1,4 +1,4 @@
-from Config import *
+import Config
 
 import tkinter as tk
 from pyautogui import press as pyautoguiPress
@@ -34,7 +34,7 @@ class FullscreenWindow:
 
         # Per-window key binding funcs
         self.root.bind("<Double-1>", self.closeWindow)
-        self.root.bind("<Control-n>", lambda e: system(CMD_TO_OPEN_BROWSER))
+        self.root.bind("<Control-n>", lambda e: system(Config.CMD_TO_OPEN_BROWSER))
         self.root.bind("<Double-3>", self.openBrowser)
         self.root.bind("<ButtonRelease-2>", lambda e: pyautoguiPress("win"))
         self.root.bind("<Button-1>", self.setMouseStateDown)
@@ -45,7 +45,7 @@ class FullscreenWindow:
         self.root.bind("<ButtonRelease-3>", self.setMouseStateUp)
 
     def updateClock(self):
-        format = f"%{ZERO_PAD_REMOVAL}H:%M:%S" if CLOCK_24H else f"%{ZERO_PAD_REMOVAL}I:%M:%S %p"
+        format = f"%{ZERO_PAD_REMOVAL}H:%M:%S" if Config.CLOCK_24H else f"%{ZERO_PAD_REMOVAL}I:%M:%S %p"
         now = datetime.now().strftime(format)
         self.clockLabel.config(text=now)
         self.clockUpdateID = self.root.after(1000, self.updateClock)  # Schedule next update
@@ -65,17 +65,17 @@ class FullscreenWindow:
         return self.getMonitorTopLeftAtCoords(curX, curY)
 
     def openBrowser(self, event):
-        system(CMD_TO_OPEN_BROWSER)
+        system(Config.CMD_TO_OPEN_BROWSER)
         if RUNNING_WINDOWS:
             from pygetwindow import getWindowsWithTitle
             from pygetwindow import Win32Window
             infLoopBreaker = 0
-            while len(getWindowsWithTitle(NEW_TAB_TITLE)) == 0: 
+            while len(getWindowsWithTitle(Config.NEW_TAB_TITLE)) == 0: 
                 infLoopBreaker += 1
                 if infLoopBreaker > 5 / 0.1: # 5 seconds 
                     return 
                 sleep(0.1)
-            newTabWindow: Win32Window = getWindowsWithTitle(NEW_TAB_TITLE)[0] 
+            newTabWindow: Win32Window = getWindowsWithTitle(Config.NEW_TAB_TITLE)[0] 
             newTabWindow.restore()
             eventX, eventY = event.x_root, event.y_root
             topLeftX, topLeftY = self.getMonitorTopLeftAtCoords(eventX, eventY)
@@ -85,7 +85,7 @@ class FullscreenWindow:
     def _changeMouseDownState(self, button, state):
         self.allThreeMouseButtonsDown.update({button: state})
         if all(self.allThreeMouseButtonsDown.values()):
-            pyautoguiHotkey(*KEYS_TO_PRESS_WHEN_ALL_MOUSE_BUTTONS_DOWN)
+            pyautoguiHotkey(*Config.KEYS_TO_PRESS_WHEN_ALL_MOUSE_BUTTONS_DOWN)
     def setMouseStateDown(self, event):
         button = event.num 
         self._changeMouseDownState(button, True)
@@ -113,9 +113,9 @@ if __name__ == "__main__":
         cmdWindow.minimize()
 
     # Create windows for all three monitors
-    monitor1 = createWindow(MONITOR_1_POS)
-    monitor2 = createWindow(MONITOR_2_POS)
-    monitor3 = createWindow(MONITOR_3_POS)
+    monitor1 = createWindow(Config.MONITOR_1_POS)
+    monitor2 = createWindow(Config.MONITOR_2_POS)
+    monitor3 = createWindow(Config.MONITOR_3_POS)
     
     # Bind the Ctrl + W key combination to closeAllWindows function
     monitor1.bind_all("<Control-w>", closeAllWindows)
