@@ -46,12 +46,14 @@ class FullscreenWindow:
             self.root.after_cancel(self.clockUpdateID) # Cancel the scheduled callback
         self.root.destroy()
 
+    def getMonitorTopLeftAtCoords(self, x, y):
+        for monitor in get_monitors():
+            if monitor.x <= x <= monitor.x + monitor.width and monitor.y <= y <= monitor.y + monitor.height:
+                return monitor.x, monitor.y
+        return x, y # Failsafe to given coords
     def getMonitorTopLeftAtMouse(self):
         curX, curY = pyautoguiPosition()
-        for monitor in get_monitors():
-            if monitor.x <= curX <= monitor.x + monitor.width and monitor.y <= curY <= monitor.y + monitor.height:
-                return monitor.x, monitor.y
-        return curX, curY # Failsafe to current mouse position
+        return self.getMonitorTopLeftAtCoords(curX, curY)
 
     def openBrowser(self, event):
         system(CMD_TO_OPEN_BROWSER)
@@ -66,7 +68,8 @@ class FullscreenWindow:
                 sleep(0.1)
             newTabWindow: Win32Window = getWindowsWithTitle(NEW_TAB_TITLE)[0] 
             newTabWindow.restore()
-            topLeftX, topLeftY = self.getMonitorTopLeftAtMouse()
+            eventX, eventY = event.x_root, event.y_root
+            topLeftX, topLeftY = self.getMonitorTopLeftAtCoords(eventX, eventY)
             newTabWindow.moveTo(topLeftX, topLeftY)
             newTabWindow.maximize()
         
