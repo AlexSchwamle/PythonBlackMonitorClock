@@ -66,21 +66,24 @@ class FullscreenWindow:
 
     def openBrowser(self, event):
         system(Config.CMD_TO_OPEN_BROWSER)
-        if RUNNING_WINDOWS:
-            from pygetwindow import getWindowsWithTitle
-            from pygetwindow import Win32Window
-            infLoopBreaker = 0
-            while len(getWindowsWithTitle(Config.NEW_TAB_TITLE)) == 0: 
-                infLoopBreaker += 1
-                if infLoopBreaker > 5 / 0.1: # 5 seconds 
-                    return 
-                sleep(0.1)
-            newTabWindow: Win32Window = getWindowsWithTitle(Config.NEW_TAB_TITLE)[0] 
-            newTabWindow.restore()
-            eventX, eventY = event.x_root, event.y_root
-            topLeftX, topLeftY = self.getMonitorTopLeftAtCoords(eventX, eventY)
-            newTabWindow.moveTo(topLeftX, topLeftY)
-            newTabWindow.maximize()
+        if not RUNNING_WINDOWS:
+            return 
+        
+        from pygetwindow import getWindowsWithTitle
+        from pygetwindow import Win32Window
+        infLoopBreaker = 0
+        while len(getWindowsWithTitle(Config.NEW_TAB_TITLE)) == 0: 
+            infLoopBreaker += 1
+            if infLoopBreaker > 5 / 0.1: # 5 seconds 
+                return 
+            sleep(0.1)
+        newTabWindow: Win32Window = getWindowsWithTitle(Config.NEW_TAB_TITLE)[0] 
+        newTabWindow.restore()
+        eventX, eventY = event.x_root, event.y_root
+        topLeftX, topLeftY = self.getMonitorTopLeftAtCoords(eventX, eventY)
+        newTabWindow.moveTo(topLeftX, topLeftY)
+        newTabWindow.resizeTo(*Config.WINDOWED_BROWSER_SIZE)
+        newTabWindow.maximize()
 
     def _changeMouseDownState(self, button, state):
         self.allThreeMouseButtonsDown.update({button: state})

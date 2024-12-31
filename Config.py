@@ -6,6 +6,9 @@ MONITOR_3_POS = 2742, 506, True
 # Make sure your browser's exe is in your path or you can specify the full path
 CMD_TO_OPEN_BROWSER = "start brave.exe" 
 
+# Due to how the browser window is moved, it resizes the window making it as small as possible. This fixes that and makes it so it's always this size in Width, Height format.
+WINDOWED_BROWSER_SIZE = 1200, 800 
+
 # This is the new tab title for the browser you open, it's used to find the window and maximize it on the same monitor you double right click
 NEW_TAB_TITLE = "New Tab"
 
