@@ -36,12 +36,11 @@ class FullscreenWindow:
         self.root.bind("<Double-1>", self.closeWindow)
         self.root.bind("<Control-n>", lambda e: system(Config.CMD_TO_OPEN_BROWSER))
         self.root.bind("<Double-3>", self.openBrowser)
-        self.root.bind("<ButtonRelease-2>", lambda e: pyautoguiPress("win"))
+        self.root.bind("<ButtonRelease-2>", self.runMiddleMouseFuncs)
         self.root.bind("<Button-1>", self.setMouseStateDown)
         self.root.bind("<Button-2>", self.setMouseStateDown)
         self.root.bind("<Button-3>", self.setMouseStateDown)
         self.root.bind("<ButtonRelease-1>", self.setMouseStateUp)
-        self.root.bind("<ButtonRelease-2>", self.setMouseStateUp)
         self.root.bind("<ButtonRelease-3>", self.setMouseStateUp)
 
     def updateClock(self):
@@ -95,6 +94,10 @@ class FullscreenWindow:
     def setMouseStateUp(self, event):
         button = event.num 
         self._changeMouseDownState(button, False)
+    def runMiddleMouseFuncs(self, event):
+        # This is a special case for the middle mouse button so it preserves the window key functionality
+        self.setMouseStateUp(event)
+        pyautoguiPress("win")
         
 def createWindow(offsets, showClock=False):
     showClock = True if len(offsets) > 2 else False
