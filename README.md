@@ -7,6 +7,7 @@ Hotkeys:
 - If you press `Ctrl` + `N` it will open a new tab page in the browser set in `Config.py`. Can also run any arbitrary command if you really wanted to. Defaults to Brave.
     - If you double right click any window it will also open the browser.
 - If you click the middle mouse button on any window it will press the windows key, showing the taskbar so you can open other already-open programs without having to open a new browser instance.
+- If you click the left, middle and right mouse buttons at the same time, it will by default press my Autohotkey script (see below) to turn off all monitors.
 
 ## Installation
 1. [Install Python](https://docs.anaconda.com/miniconda/)
