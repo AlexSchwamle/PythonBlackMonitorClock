@@ -80,8 +80,8 @@ class FullscreenWindow:
         newTabWindow.restore()
         eventX, eventY = event.x_root, event.y_root
         topLeftX, topLeftY = self.getMonitorTopLeftAtCoords(eventX, eventY)
-        newTabWindow.moveTo(topLeftX, topLeftY)
         newTabWindow.resizeTo(*Config.WINDOWED_BROWSER_SIZE)
+        newTabWindow.moveTo(topLeftX, topLeftY)
         newTabWindow.maximize()
 
     def _changeMouseDownState(self, button, state):
