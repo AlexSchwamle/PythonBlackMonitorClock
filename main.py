@@ -7,7 +7,7 @@ from pyautogui import hotkey as pyautoguiHotkey
 from screeninfo import get_monitors 
 from datetime import datetime
 from os import system, name
-from time import sleep
+from time import sleep, time
 
 RUNNING_WINDOWS = name == "nt"
 ZERO_PAD_REMOVAL = "#" if RUNNING_WINDOWS else "-"
@@ -29,6 +29,7 @@ class FullscreenWindow:
             self.updateClock()
 
         self.allThreeMouseButtonsDown = {1: False, 2: False, 3: False}
+        self.allThreeMouseButtonsDownCooldown = 0 # Cooldown to prevent win key press after releasing all mouse buttons
 
         self.root.state("zoomed")
 
@@ -88,6 +89,7 @@ class FullscreenWindow:
         self.allThreeMouseButtonsDown.update({button: state})
         if all(self.allThreeMouseButtonsDown.values()):
             pyautoguiHotkey(*Config.KEYS_TO_PRESS_WHEN_ALL_MOUSE_BUTTONS_DOWN)
+            self.allThreeMouseButtonsDownCooldown = time() + 5
     def setMouseStateDown(self, event):
         button = event.num 
         self._changeMouseDownState(button, True)
@@ -97,6 +99,8 @@ class FullscreenWindow:
     def runMiddleMouseFuncs(self, event):
         # This is a special case for the middle mouse button so it preserves the window key functionality
         self.setMouseStateUp(event)
+        if self.allThreeMouseButtonsDownCooldown > time():
+            return
         pyautoguiPress("win")
         
 def createWindow(offsets, showClock=False):
