@@ -36,6 +36,7 @@ class FullscreenWindow:
         # Per-window key binding funcs
         self.root.bind("<Double-1>", self.closeWindow)
         self.root.bind("<Control-n>", lambda e: system(Config.CMD_TO_OPEN_BROWSER))
+        self.root.bind("<Control-t>", lambda e: system(Config.CMD_TO_OPEN_BROWSER))
         self.root.bind("<Double-3>", self.openBrowser)
         self.root.bind("<ButtonRelease-2>", self.runMiddleMouseFuncs)
         self.root.bind("<Button-1>", self.setMouseStateDown)
