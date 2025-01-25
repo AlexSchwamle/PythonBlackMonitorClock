@@ -6,6 +6,9 @@ MONITOR_3_POS = 2742, 506, True
 # Make sure your browser's exe is in your path or you can specify the full path
 CMD_TO_OPEN_BROWSER = "start brave.exe" 
 
+# If True, finds the monitor the mouse is on and opens a maximized browser there. If False, it uses the default behavior of the operating system.
+ALWAYS_OPEN_BROWSER_MAXIMIZED_TO_MONITOR_AT_MOUSE_POS = True 
+
 # Due to how the browser window is moved, it resizes the window making it as small as possible. This fixes that and makes it so it's always this size in Width, Height format.
 WINDOWED_BROWSER_SIZE = 1200, 800 
 

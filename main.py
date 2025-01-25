@@ -35,8 +35,8 @@ class FullscreenWindow:
 
         # Per-window key binding funcs
         self.root.bind("<Double-1>", self.closeWindow)
-        self.root.bind("<Control-n>", lambda e: system(Config.CMD_TO_OPEN_BROWSER))
-        self.root.bind("<Control-t>", lambda e: system(Config.CMD_TO_OPEN_BROWSER))
+        self.root.bind("<Control-n>", self.quickOpenBrowser)
+        self.root.bind("<Control-t>", self.quickOpenBrowser)
         self.root.bind("<Double-3>", self.openBrowser)
         self.root.bind("<ButtonRelease-2>", self.runMiddleMouseFuncs)
         self.root.bind("<Button-1>", self.setMouseStateDown)
@@ -65,7 +65,13 @@ class FullscreenWindow:
         curX, curY = pyautoguiPosition()
         return self.getMonitorTopLeftAtCoords(curX, curY)
 
-    def openBrowser(self, event):
+    def quickOpenBrowser(self, _):
+        if Config.ALWAYS_OPEN_BROWSER_MAXIMIZED_TO_MONITOR_AT_MOUSE_POS:
+            self.openBrowser(None, True)
+        else:
+            system(Config.CMD_TO_OPEN_BROWSER)
+
+    def openBrowser(self, event, useMouseCoords=False):
         system(Config.CMD_TO_OPEN_BROWSER)
         if not RUNNING_WINDOWS:
             return 
@@ -80,7 +86,11 @@ class FullscreenWindow:
             sleep(0.1)
         newTabWindow: Win32Window = getWindowsWithTitle(Config.NEW_TAB_TITLE)[0] 
         newTabWindow.restore()
-        eventX, eventY = event.x_root, event.y_root
+
+        if useMouseCoords:
+            eventX, eventY = pyautoguiPosition()
+        else:
+            eventX, eventY = event.x_root, event.y_root
         topLeftX, topLeftY = self.getMonitorTopLeftAtCoords(eventX, eventY)
         newTabWindow.resizeTo(*Config.WINDOWED_BROWSER_SIZE)
         newTabWindow.moveTo(topLeftX, topLeftY)
